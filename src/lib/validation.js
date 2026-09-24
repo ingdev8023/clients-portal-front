@@ -4,6 +4,20 @@ export const PROJECT_STATUSES = ['planned', 'active', 'paused', 'completed', 'ca
 export const STAGE_STATUSES = ['pending', 'active', 'completed'];
 export const PAYMENT_STATUSES = ['pending', 'paid', 'overdue', 'cancelled'];
 
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const STRONG_PASSWORD_PATTERN = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{12,128}$/;
+
+export function validateClientAccount(client, t = (key) => translate('en', key)) {
+  if (!client.name.trim()) return t('validation.clientName');
+  if (!EMAIL_PATTERN.test(client.email.trim()) || client.email.trim().length > 254) {
+    return t('validation.clientEmail');
+  }
+  if (!STRONG_PASSWORD_PATTERN.test(client.password)) {
+    return t('validation.clientPassword');
+  }
+  return '';
+}
+
 export function validateProject(project, t = (key) => translate('en', key)) {
   if (!project.client_id) return t('validation.client');
   if (!project.name.trim()) return t('validation.projectName');

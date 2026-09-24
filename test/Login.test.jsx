@@ -6,6 +6,7 @@ import Login from '../src/pages/Login';
 import { useAuth } from '../src/hooks/useAuth';
 
 vi.mock('../src/hooks/useAuth', () => ({ useAuth: vi.fn() }));
+vi.mock('../src/components/SystemAnimation/SystemAnimation', () => ({ default: () => <canvas aria-hidden="true" /> }));
 
 describe('Login', () => {
   it('toggles password visibility accessibly', async () => {

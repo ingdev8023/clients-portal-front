@@ -21,6 +21,9 @@ npm test
 npm run build
 ```
 
+Before a production release, also run `npm audit --audit-level=moderate` and
+review [`docs/security-deployment-review.md`](docs/security-deployment-review.md).
+
 ## Architecture
 
 The application uses a small MVC-style structure suited to React:
@@ -33,7 +36,7 @@ The application uses a small MVC-style structure suited to React:
 - `src/styles/`: tokens, base rules, shared components, layouts, and page-specific CSS. JSX contains behavior and semantic state, not visual declarations.
 - `test/`: Vitest and Testing Library coverage, plus a development-only responsive visual harness.
 
-Admin project management uses `/admin/projects/new` for creation and `/admin/projects/:projectId` for project overview, stage, update, and payment management.
+Admin project management uses `/admin/projects/new` for creation and `/admin/projects/:projectId` for project overview, stage, update, and payment management. The dashboard's New client modal calls the authenticated `create-client` Edge Function, which creates the Auth user, client organization, and `client_users` link without exposing server credentials to the browser.
 
 ## Security Notes
 
@@ -43,6 +46,8 @@ Admin project management uses `/admin/projects/new` for creation and `/admin/pro
 - Mutations rely on backend RLS, grants, checks, and triggers. Hiding a control is never considered authorization.
 - Unknown backend errors are logged for development but replaced with safe user-facing messages.
 - Logout uses local scope so signing out of one shared browser session does not invalidate every session for that account.
+- Frontend startup rejects non-HTTPS remote Supabase URLs and secret/service-role keys.
+- `public/_headers` supplies the CSP and other browser security headers for hosts that support Netlify-style header files. Configure equivalent headers when using a different host.
 
 ## Repository Hygiene
 

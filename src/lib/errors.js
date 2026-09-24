@@ -19,6 +19,6 @@ export function toUserMessage(error, fallback = translate('en', 'errors.generic'
 
   // Raw database messages can expose implementation details, so unknown errors
   // are logged for developers and replaced with a stable message for users.
-  console.error(error);
+  if (import.meta.env.DEV) console.error(error);
   return fallback;
 }

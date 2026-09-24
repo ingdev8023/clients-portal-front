@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { validatePayment, validateProject, validateStage, validateUpdate } from '../src/lib/validation';
+import { validateClientAccount, validatePayment, validateProject, validateStage, validateUpdate } from '../src/lib/validation';
 
 const validProject = {
   client_id: 'client-1', name: 'Portal', slug: 'client-portal', description: '',
@@ -17,4 +17,12 @@ describe('project resource validation', () => {
   it('requires a positive stage order', () => expect(validateStage({ name: 'Build', position: 0 })).toMatch(/positive/));
   it('requires update content', () => expect(validateUpdate({ message: '   ' })).toMatch(/message/));
   it('rejects negative payment amounts', () => expect(validatePayment({ description: 'Deposit', amount: -1 })).toMatch(/zero or greater/));
+});
+
+describe('client account validation', () => {
+  const validClient = { name: 'Ana Torres', email: 'ana@example.com', password: 'StrongPass!42' };
+
+  it('accepts complete client credentials', () => expect(validateClientAccount(validClient)).toBe(''));
+  it('rejects malformed email addresses', () => expect(validateClientAccount({ ...validClient, email: 'not-an-email' })).toMatch(/valid email/));
+  it('requires a strong 12-character password', () => expect(validateClientAccount({ ...validClient, password: 'password' })).toMatch(/12/));
 });

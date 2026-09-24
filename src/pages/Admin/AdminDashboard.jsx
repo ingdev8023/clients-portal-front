@@ -1,5 +1,6 @@
-import { Building2, FolderKanban, Plus, RefreshCw } from 'lucide-react';
+import { Building2, FolderKanban, Plus, RefreshCw, UserPlus } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import CreateClientDialog from '../../components/CreateClientDialog';
 import StatusBadge from '../../components/StatusBadge';
 import { useAdminDashboardController } from '../../controllers/useAdminDashboardController';
 import { formatDateOnly } from '../../lib/format';
@@ -7,6 +8,10 @@ import { usePreferences } from '../../hooks/usePreferences';
 
 export default function AdminDashboard() {
   const controller = useAdminDashboardController();
+  return <AdminDashboardView controller={controller} />;
+}
+
+export function AdminDashboardView({ controller }) {
   const { language, t } = usePreferences();
   const activeProjects = controller.projects.filter((project) => project.status === 'active').length;
 
@@ -25,12 +30,17 @@ export default function AdminDashboard() {
     <div className="dashboard-stack">
       <header className="page-header">
         <div><h1>{t('dashboard.title')}</h1><p>{t('dashboard.subtitle')}</p></div>
-        {controller.clients.length ? (
-          <Link className="btn btn-primary" to="/admin/projects/new"><Plus size={18} /> {t('dashboard.newProject')}</Link>
-        ) : (
-          <span className="btn btn-primary is-disabled" aria-disabled="true"><Plus size={18} /> {t('dashboard.newProject')}</span>
-        )}
+        <div className="page-actions">
+          <button className="btn btn-secondary" type="button" onClick={controller.openClientDialog}><UserPlus size={18} /> {t('dashboard.newClient')}</button>
+          {controller.clients.length ? (
+            <Link className="btn btn-primary" to="/admin/projects/new"><Plus size={18} /> {t('dashboard.newProject')}</Link>
+          ) : (
+            <span className="btn btn-primary is-disabled" aria-disabled="true"><Plus size={18} /> {t('dashboard.newProject')}</span>
+          )}
+        </div>
       </header>
+
+      {controller.clientNotice && <div className="alert alert-success" role="status">{controller.clientNotice}</div>}
 
       <section className="stats-grid" aria-label={t('dashboard.summary')}>
         <article className="stat-card"><div className="stat-icon stat-icon--teal"><Building2 size={22} /></div><div><strong>{controller.clients.length}</strong><span>{t('dashboard.totalClients')}</span></div></article>
@@ -70,6 +80,17 @@ export default function AdminDashboard() {
           </>
         )}
       </section>
+
+      {controller.clientDialogOpen && (
+        <CreateClientDialog
+          draft={controller.clientDraft}
+          error={controller.clientError}
+          busy={controller.savingClient}
+          onCancel={controller.closeClientDialog}
+          onChange={controller.updateClientField}
+          onSubmit={controller.createClient}
+        />
+      )}
     </div>
   );
 }

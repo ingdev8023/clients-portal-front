@@ -5,6 +5,7 @@ import { Eye, EyeOff, LogIn } from 'lucide-react';
 import { toUserMessage } from '../lib/errors';
 import PreferenceControls from '../components/PreferenceControls';
 import { usePreferences } from '../hooks/usePreferences';
+import SystemAnimation from '../components/SystemAnimation/SystemAnimation';
 
 export default function Login() {
   const { user, profile, signIn } = useAuth();
@@ -41,6 +42,8 @@ export default function Login() {
 
   return (
     <main className="login-page">
+      <SystemAnimation />
+      <div className="login-background-overlay" aria-hidden="true" />
       <div className="login-preferences"><PreferenceControls /></div>
       <section className="panel login-panel" aria-labelledby="login-title">
         <div className="login-heading">
