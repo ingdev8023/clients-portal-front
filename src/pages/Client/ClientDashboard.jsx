@@ -1,4 +1,5 @@
 import { Activity, CheckCircle2, Clock, CreditCard, Home, MessageSquare, RefreshCw } from 'lucide-react';
+import ProjectProgressPanel from '../../components/ProjectProgressPanel';
 import StatusBadge from '../../components/StatusBadge';
 import { useClientPortalController } from '../../controllers/useClientPortalController';
 import { useAuth } from '../../hooks/useAuth';
@@ -67,7 +68,6 @@ export default function ClientDashboard() {
   }
 
   const { project, phases, updates, payments, comments } = controller;
-  const overduePayments = payments.filter((payment) => payment.status === 'overdue');
   const activePhase = phases.find((phase) => phase.id === project.current_phase_id || phase.status === 'active');
 
   return (
@@ -95,20 +95,7 @@ export default function ClientDashboard() {
               </div>
             )}
 
-            <div className="panel panel-padded project-overview">
-              <div className="overview-heading">
-                <div><span>Project progress</span><strong>{project.progress_percentage}%</strong></div>
-                <span>{activePhase ? `Current phase: ${activePhase.name}` : 'No active phase'}</span>
-              </div>
-              <progress className="progress-native" value={project.progress_percentage} max="100">{project.progress_percentage}%</progress>
-              <div className={`payment-summary ${overduePayments.length ? 'payment-summary--danger' : 'payment-summary--success'}`}>
-                {overduePayments.length ? <CreditCard size={24} /> : <CheckCircle2 size={24} />}
-                <div>
-                  <strong>{overduePayments.length ? 'Payment attention needed' : 'Payments up to date'}</strong>
-                  <span>{overduePayments.length ? `${overduePayments.length} overdue payment(s), totaling ${formatCurrency(overduePayments.reduce((sum, payment) => sum + Number(payment.amount), 0))}.` : 'There are no overdue payments on this project.'}</span>
-                </div>
-              </div>
-            </div>
+            <ProjectProgressPanel project={project} activeStage={activePhase} payments={payments} />
           </section>
 
           <section id="status" className="section-anchor dashboard-stack" aria-labelledby="status-title">

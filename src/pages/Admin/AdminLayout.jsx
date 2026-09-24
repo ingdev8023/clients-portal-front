@@ -23,7 +23,7 @@ export default function AdminLayout() {
             <LayoutDashboard size={20} />
             Dashboard
           </a>
-          <a href="#projects" className="nav-link">
+          <a href="/admin#projects" className="nav-link">
             <FolderKanban size={20} />
             Projects
           </a>

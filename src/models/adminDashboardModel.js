@@ -32,28 +32,3 @@ export async function getAdminDashboardData() {
     projects: throwOnError(projectsResult),
   };
 }
-
-export async function createProject(project) {
-  const { data, error } = await supabase
-    .from('projects')
-    .insert(project)
-    .select(PROJECT_COLUMNS)
-    .single();
-
-  if (error) throw error;
-  return data;
-}
-
-export async function updateProject(projectId, changes) {
-  // The database triggers remain responsible for completion timestamps and
-  // any other derived values. Returning the row keeps the UI server-authoritative.
-  const { data, error } = await supabase
-    .from('projects')
-    .update(changes)
-    .eq('id', projectId)
-    .select(PROJECT_COLUMNS)
-    .single();
-
-  if (error) throw error;
-  return data;
-}

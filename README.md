@@ -17,6 +17,7 @@ Quality checks:
 
 ```bash
 npm run lint
+npm test
 npm run build
 ```
 
@@ -30,6 +31,9 @@ The application uses a small MVC-style structure suited to React:
 - `src/contexts/`: authenticated user/profile lifecycle shared by both role areas.
 - `src/lib/`: Supabase setup plus formatting and safe error helpers.
 - `src/styles/`: tokens, base rules, shared components, layouts, and page-specific CSS. JSX contains behavior and semantic state, not visual declarations.
+- `test/`: Vitest and Testing Library coverage, plus a development-only responsive visual harness.
+
+Admin project management uses `/admin/projects/new` for creation and `/admin/projects/:projectId` for project overview, stage, update, and payment management.
 
 ## Security Notes
 

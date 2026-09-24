@@ -8,6 +8,7 @@ import AdminLayout from './pages/Admin/AdminLayout';
 import ClientLayout from './pages/Client/ClientLayout';
 
 const AdminDashboard = lazy(() => import('./pages/Admin/AdminDashboard'));
+const AdminProjectDetails = lazy(() => import('./pages/Admin/AdminProjectDetails'));
 const ClientDashboard = lazy(() => import('./pages/Client/ClientDashboard'));
 
 const lazyPage = (page) => (
@@ -45,6 +46,7 @@ function AppRoutes() {
       
       <Route path="/admin" element={<AdminLayout />}>
         <Route index element={lazyPage(<AdminDashboard />)} />
+        <Route path="projects/:projectId" element={lazyPage(<AdminProjectDetails />)} />
       </Route>
       
       <Route path="/portal" element={<ClientLayout />}>
