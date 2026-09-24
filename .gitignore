@@ -1,0 +1,36 @@
+# Dependencies and generated builds
+node_modules/
+dist/
+dist-ssr/
+coverage/
+.vite/
+
+# Local configuration. Vite exposes every VITE_* value to the browser bundle.
+.env
+.env.*
+!.env.example
+*.local
+
+# Logs and tool caches
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+.eslintcache
+
+# Hosting and editor metadata
+.netlify/
+.vercel/
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+Thumbs.db
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

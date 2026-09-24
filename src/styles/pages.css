@@ -1,0 +1,90 @@
+.login-page { min-height: 100vh; display: grid; place-items: center; padding: 1.25rem; background: radial-gradient(circle at top, rgba(53, 182, 168, 0.08), transparent 42%), var(--canvas); }
+.login-panel { width: min(410px, 100%); padding: 2rem; }
+.login-heading { margin-bottom: 1.75rem; text-align: center; }
+.login-heading h1 { font-size: 1.5rem; }
+.login-heading p { margin-bottom: 0; }
+.login-icon { width: 52px; height: 52px; display: grid; place-items: center; margin: 0 auto 1rem; border-radius: 50%; background: var(--primary-soft); color: var(--primary); }
+.login-panel .alert { margin-bottom: 1rem; }
+.login-panel form { display: grid; gap: 1rem; }
+
+.page-header, .section-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 1.5rem; }
+.page-header h1, .page-header p, .section-heading h2, .section-heading p { margin-bottom: 0; }
+.page-header > div > p:not(.eyebrow) { max-width: 620px; }
+.eyebrow { margin-bottom: 0.35rem; color: var(--primary); font-size: 0.72rem; font-weight: 800; text-transform: uppercase; }
+.helper-text { align-self: end; color: var(--text-subtle); font-size: 0.82rem; }
+
+.stats-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
+.stat-card { min-height: 104px; display: flex; align-items: center; gap: 1rem; padding: 1.1rem; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); }
+.stat-icon { width: 44px; height: 44px; display: grid; place-items: center; flex: 0 0 44px; border-radius: var(--radius-sm); }
+.stat-icon--teal { background: var(--primary-soft); color: var(--primary); }
+.stat-icon--coral { background: var(--coral-soft); color: var(--coral); }
+.stat-icon--amber { background: var(--amber-soft); color: var(--amber); }
+.stat-card > div:last-child { display: grid; }
+.stat-card strong { font-size: 1.45rem; line-height: 1.1; }
+.stat-card span { color: var(--text-muted); font-size: 0.82rem; }
+.dashboard-section { display: grid; gap: 1rem; }
+
+.portal-page-header { align-items: center; }
+.project-switcher { max-width: 440px; }
+.project-overview { display: grid; gap: 1.25rem; }
+.overview-heading { display: flex; align-items: end; justify-content: space-between; gap: 1rem; }
+.overview-heading > div { display: flex; align-items: baseline; gap: 0.75rem; }
+.overview-heading strong { color: var(--primary); font-size: 1.35rem; }
+.overview-heading > span { color: var(--text-muted); font-size: 0.85rem; }
+.payment-summary { display: flex; align-items: center; gap: 0.85rem; padding: 0.9rem; border: 1px solid; border-radius: var(--radius-sm); }
+.payment-summary > div { display: grid; }
+.payment-summary span { color: var(--text-muted); font-size: 0.84rem; }
+.payment-summary--success { border-color: rgba(87, 197, 137, 0.3); background: var(--success-soft); color: var(--success); }
+.payment-summary--danger { border-color: rgba(240, 120, 114, 0.3); background: var(--danger-soft); color: var(--danger); }
+
+.roadmap-list { display: grid; gap: 0.75rem; margin: 0; padding: 0; list-style: none; }
+.roadmap-item { display: grid; grid-template-columns: 32px minmax(0, 1fr); gap: 0.75rem; padding: 1rem; border: 1px solid var(--border); border-radius: var(--radius-sm); }
+.roadmap-item--active { border-color: rgba(53, 182, 168, 0.35); background: var(--primary-soft); }
+.roadmap-item--pending { opacity: 0.72; }
+.roadmap-icon { display: grid; place-items: start center; padding-top: 0.1rem; color: var(--text-subtle); }
+.roadmap-item--completed .roadmap-icon { color: var(--success); }
+.roadmap-item--active .roadmap-icon { color: var(--primary); }
+.roadmap-icon span { width: 18px; height: 18px; margin-top: 2px; border: 2px solid currentColor; border-radius: 50%; }
+.roadmap-copy > div { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.roadmap-copy p { margin: 0.35rem 0 0; font-size: 0.88rem; }
+
+.timeline-list { display: grid; gap: 1.25rem; }
+.timeline-item { padding-left: 1rem; border-left: 2px solid var(--primary); }
+.timeline-item time, .comment-item time { color: var(--text-subtle); font-size: 0.75rem; }
+.timeline-item h4 { margin: 0.25rem 0; }
+.timeline-item p { margin-bottom: 0; font-size: 0.9rem; }
+
+.payment-list { overflow: hidden; }
+.payment-row { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1rem 1.25rem; border-bottom: 1px solid var(--border); }
+.payment-row:last-child { border-bottom: 0; }
+.payment-row > div { display: grid; gap: 0.25rem; }
+.payment-row > div:last-child { justify-items: end; }
+.payment-row span { color: var(--text-muted); font-size: 0.8rem; }
+
+.comments-panel { padding: 1.25rem; }
+.comment-list { display: grid; gap: 0.75rem; }
+.comment-item { padding: 0.9rem; border-left: 2px solid var(--coral); background: var(--canvas-soft); }
+.comment-item > div { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.comment-item p { margin: 0.4rem 0 0; color: var(--text); white-space: pre-wrap; overflow-wrap: anywhere; }
+.comment-form { display: grid; gap: 0.75rem; margin-top: 1.25rem; padding-top: 1.25rem; border-top: 1px solid var(--border); }
+.comment-form-footer { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.character-count { color: var(--text-subtle); font-size: 0.75rem; }
+.empty-copy { margin-bottom: 0; }
+.empty-state { display: grid; justify-items: center; max-width: 680px; margin: 4rem auto; padding: 3rem; text-align: center; }
+.empty-state p { max-width: 480px; margin-bottom: 0; }
+.empty-state-icon { width: 56px; height: 56px; display: grid; place-items: center; margin-bottom: 1rem; border-radius: 50%; background: var(--primary-soft); color: var(--primary); }
+
+@media (max-width: 760px) {
+  .stats-grid { grid-template-columns: 1fr; }
+  .page-header, .section-heading { align-items: stretch; flex-direction: column; }
+  .page-header .btn { align-self: flex-start; }
+  .overview-heading { align-items: flex-start; flex-direction: column; }
+}
+
+@media (max-width: 480px) {
+  .login-panel { padding: 1.25rem; }
+  .payment-row, .comment-item > div { align-items: flex-start; flex-direction: column; }
+  .payment-row > div:last-child { justify-items: start; }
+  .comment-form-footer { align-items: stretch; flex-direction: column; }
+  .comment-form-footer .btn { width: 100%; }
+}
