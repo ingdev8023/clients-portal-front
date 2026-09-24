@@ -1,39 +1,41 @@
+import { translate } from '../i18n/translations';
+
 export const PROJECT_STATUSES = ['planned', 'active', 'paused', 'completed', 'cancelled'];
 export const STAGE_STATUSES = ['pending', 'active', 'completed'];
 export const PAYMENT_STATUSES = ['pending', 'paid', 'overdue', 'cancelled'];
 
-export function validateProject(project) {
-  if (!project.client_id) return 'Choose a client.';
-  if (!project.name.trim()) return 'Enter a project name.';
+export function validateProject(project, t = (key) => translate('en', key)) {
+  if (!project.client_id) return t('validation.client');
+  if (!project.name.trim()) return t('validation.projectName');
   if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(project.slug)) {
-    return 'Use lowercase letters, numbers, and single hyphens for the slug.';
+    return t('validation.slug');
   }
   if (!Number.isFinite(project.progress_percentage) || project.progress_percentage < 0 || project.progress_percentage > 100) {
-    return 'Progress must be between 0 and 100.';
+    return t('validation.progress');
   }
   if (project.start_date && project.estimated_end_date && project.estimated_end_date < project.start_date) {
-    return 'The target date cannot be before the start date.';
+    return t('validation.date');
   }
   return '';
 }
 
-export function validateStage(stage) {
-  if (!stage.name.trim()) return 'Enter a stage name.';
+export function validateStage(stage, t = (key) => translate('en', key)) {
+  if (!stage.name.trim()) return t('validation.stageName');
   if (!Number.isInteger(Number(stage.position)) || Number(stage.position) < 1) {
-    return 'Stage order must be a positive whole number.';
+    return t('validation.stageOrder');
   }
   return '';
 }
 
-export function validateUpdate(update) {
-  if (!update.message.trim()) return 'Enter an update message.';
+export function validateUpdate(update, t = (key) => translate('en', key)) {
+  if (!update.message.trim()) return t('validation.update');
   return '';
 }
 
-export function validatePayment(payment) {
-  if (!payment.description.trim()) return 'Enter a payment description.';
+export function validatePayment(payment, t = (key) => translate('en', key)) {
+  if (!payment.description.trim()) return t('validation.paymentDescription');
   if (!Number.isFinite(Number(payment.amount)) || Number(payment.amount) < 0) {
-    return 'Payment amount must be zero or greater.';
+    return t('validation.paymentAmount');
   }
   return '';
 }

@@ -19,5 +19,7 @@ describe('ProjectProgressPanel', () => {
     expect(banner).toHaveTextContent('Payment attention needed');
     expect(banner).toHaveTextContent('1 overdue payment');
     expect(banner).toHaveTextContent('250,000');
+    expect(banner.querySelector('svg')).not.toBeInTheDocument();
+    expect(document.querySelector('.progress-gear-orbit')).not.toBeInTheDocument();
   });
 });

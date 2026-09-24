@@ -1,18 +1,20 @@
-const ERROR_MESSAGES = {
-  '23505': 'That value is already in use. Choose another one and try again.',
-  '23514': 'One or more values do not meet the project rules.',
-  '42501': 'You do not have permission to perform this action.',
-  PGRST116: 'The requested record is not available.',
+import { translate } from '../i18n/translations';
+
+const ERROR_KEYS = {
+  '23505': 'errors.duplicate',
+  '23514': 'errors.invalidValues',
+  '42501': 'errors.permission',
+  PGRST116: 'errors.unavailable',
 };
 
-export function toUserMessage(error, fallback = 'Something went wrong. Please try again.') {
+export function toUserMessage(error, fallback = translate('en', 'errors.generic'), t = (key) => translate('en', key)) {
   if (!error) return fallback;
-  if (ERROR_MESSAGES[error.code]) return ERROR_MESSAGES[error.code];
+  if (ERROR_KEYS[error.code]) return t(ERROR_KEYS[error.code]);
 
   const message = error.message?.toLowerCase() || '';
-  if (message.includes('invalid login credentials')) return 'The email or password is incorrect.';
+  if (message.includes('invalid login credentials')) return t('errors.invalidCredentials');
   if (message.includes('failed to fetch') || message.includes('network')) {
-    return 'Unable to reach the server. Check your connection and try again.';
+    return t('errors.network');
   }
 
   // Raw database messages can expose implementation details, so unknown errors

@@ -1,17 +1,28 @@
-import { format } from 'date-fns';
+const localeFor = (language) => language === 'es' ? 'es-CO' : 'en-US';
 
-export function formatDateOnly(value) {
-  if (!value) return 'TBD';
+export function formatDateOnly(value, language = 'en') {
+  if (!value) return language === 'es' ? 'Por definir' : 'TBD';
   const [year, month, day] = value.split('-').map(Number);
-  return format(new Date(year, month - 1, day), 'MMM d, yyyy');
+  return new Intl.DateTimeFormat(localeFor(language), {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+  }).format(new Date(year, month - 1, day));
 }
 
-export function formatDateTime(value) {
-  return value ? format(new Date(value), 'MMM d, yyyy - h:mm a') : '';
+export function formatDateTime(value, language = 'en') {
+  if (!value) return '';
+  return new Intl.DateTimeFormat(localeFor(language), {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit',
+  }).format(new Date(value));
 }
 
-export function formatCurrency(value) {
-  return new Intl.NumberFormat('en-US', {
+export function formatCurrency(value, language = 'en') {
+  return new Intl.NumberFormat(localeFor(language), {
     style: 'currency',
     currency: 'COP',
     maximumFractionDigits: 0,

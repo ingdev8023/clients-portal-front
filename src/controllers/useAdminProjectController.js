@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
+import { usePreferences } from '../hooks/usePreferences';
 import { toUserMessage } from '../lib/errors';
 import { slugify } from '../lib/format';
 import {
@@ -34,6 +35,7 @@ export function useAdminProjectController(projectId) {
   const isNew = !projectId;
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { t } = usePreferences();
   const [clients, setClients] = useState([]);
   const [project, setProject] = useState(null);
   const [projectDraft, setProjectDraft] = useState(EMPTY_PROJECT);
@@ -61,20 +63,20 @@ export function useAdminProjectController(projectId) {
     try {
       applyData(await getAdminProjectData(projectId));
     } catch (loadError) {
-      setError(toUserMessage(loadError, 'The project details could not be loaded.'));
+      setError(toUserMessage(loadError, t('errors.projectDetails'), t));
     } finally {
       if (showSkeleton) setLoading(false);
     }
-  }, [applyData, projectId]);
+  }, [applyData, projectId, t]);
 
   useEffect(() => {
     let active = true;
     getAdminProjectData(projectId)
       .then((data) => { if (active) applyData(data); })
-      .catch((loadError) => { if (active) setError(toUserMessage(loadError, 'The project details could not be loaded.')); })
+      .catch((loadError) => { if (active) setError(toUserMessage(loadError, t('errors.projectDetails'), t)); })
       .finally(() => { if (active) setLoading(false); });
     return () => { active = false; };
-  }, [applyData, projectId]);
+  }, [applyData, projectId, t]);
 
   const updateProjectField = (field, value) => {
     if (field === 'slug') setSlugEdited(true);
@@ -95,7 +97,7 @@ export function useAdminProjectController(projectId) {
       await loadProject(false);
       return true;
     } catch (actionError) {
-      setError(toUserMessage(actionError, 'The change could not be saved.'));
+      setError(toUserMessage(actionError, t('errors.change'), t));
       return false;
     } finally {
       setBusyAction('');
@@ -103,7 +105,7 @@ export function useAdminProjectController(projectId) {
   };
 
   const saveProject = async () => {
-    const validationError = validateProject(projectDraft);
+    const validationError = validateProject(projectDraft, t);
     if (validationError) { setError(validationError); return false; }
 
     setBusyAction('project');
@@ -112,12 +114,12 @@ export function useAdminProjectController(projectId) {
       const savedProject = isNew
         ? await createProject(toProjectPayload(projectDraft))
         : await updateProject(projectId, toProjectPayload(projectDraft));
-      setNotice(isNew ? 'Project created.' : 'Project details updated.');
+      setNotice(isNew ? t('project.created') : t('project.updated'));
       if (isNew) navigate(`/admin/projects/${savedProject.id}`, { replace: true });
       else await loadProject(false);
       return true;
     } catch (saveError) {
-      setError(toUserMessage(saveError, 'The project could not be saved.'));
+      setError(toUserMessage(saveError, t('errors.projectSave'), t));
       return false;
     } finally {
       setBusyAction('');
@@ -125,33 +127,33 @@ export function useAdminProjectController(projectId) {
   };
 
   const saveStage = async (draft) => {
-    const validationError = validateStage(draft);
+    const validationError = validateStage(draft, t);
     if (validationError) { setError(validationError); return false; }
     const payload = { name: draft.name.trim(), description: draft.description.trim() || null, status: draft.status, position: Number(draft.position) };
-    return runAction('stage', () => draft.id ? updateStage(projectId, draft.id, payload) : createStage(projectId, payload), draft.id ? 'Stage updated.' : 'Stage added.');
+    return runAction('stage', () => draft.id ? updateStage(projectId, draft.id, payload) : createStage(projectId, payload), draft.id ? t('stage.updated') : t('stage.added'));
   };
 
   const saveUpdate = async (draft) => {
-    const validationError = validateUpdate(draft);
+    const validationError = validateUpdate(draft, t);
     if (validationError) { setError(validationError); return false; }
     const payload = { title: draft.title.trim() || null, message: draft.message.trim() };
-    return runAction('update', () => draft.id ? updateProjectUpdate(projectId, draft.id, payload) : createProjectUpdate(projectId, user.id, payload), draft.id ? 'Update edited.' : 'Update published.');
+    return runAction('update', () => draft.id ? updateProjectUpdate(projectId, draft.id, payload) : createProjectUpdate(projectId, user.id, payload), draft.id ? t('update.updated') : t('update.published'));
   };
 
   const savePayment = async (draft) => {
-    const validationError = validatePayment(draft);
+    const validationError = validatePayment(draft, t);
     if (validationError) { setError(validationError); return false; }
     const payload = { description: draft.description.trim(), amount: Number(draft.amount), status: draft.status, due_date: draft.due_date || null };
-    return runAction('payment', () => draft.id ? updatePayment(projectId, draft.id, payload) : createPayment(projectId, payload), draft.id ? 'Payment updated.' : 'Payment added.');
+    return runAction('payment', () => draft.id ? updatePayment(projectId, draft.id, payload) : createPayment(projectId, payload), draft.id ? t('payment.updated') : t('payment.added'));
   };
 
   return {
     isNew, clients, project, projectDraft, stages, updates, payments,
     loading, busyAction, error, notice, updateProjectField, saveProject, saveStage,
     saveUpdate, savePayment,
-    deleteStage: (id) => runAction('stage', () => deleteStage(projectId, id), 'Stage deleted.'),
-    deleteUpdate: (id) => runAction('update', () => deleteProjectUpdate(projectId, id), 'Update deleted.'),
-    deletePayment: (id) => runAction('payment', () => deletePayment(projectId, id), 'Payment deleted.'),
+    deleteStage: (id) => runAction('stage', () => deleteStage(projectId, id), t('stage.deleted')),
+    deleteUpdate: (id) => runAction('update', () => deleteProjectUpdate(projectId, id), t('update.deleted')),
+    deletePayment: (id) => runAction('payment', () => deletePayment(projectId, id), t('payment.deleted')),
     reload: loadProject,
   };
 }

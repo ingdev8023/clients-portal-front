@@ -4,65 +4,93 @@
 .page-state p { margin-bottom: 0; }
 .page-state--error { color: var(--danger); }
 
-/* Mobile shell is the default; the persistent sidebar is introduced at desktop width. */
+/* The mobile header keeps preferences available while the rest of navigation collapses. */
+.topbar-actions, .preference-controls { display: flex; align-items: center; gap: 0.4rem; }
+.preference-button {
+  min-width: 40px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  padding: 0 0.55rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-raised);
+  color: var(--text-muted);
+  cursor: pointer;
+}
+.preference-button:hover { border-color: var(--border-strong); background: var(--surface-hover); color: var(--text); }
+.preference-button span { font-size: 0.7rem; font-weight: 800; }
+.mobile-menu-button { display: inline-flex; }
+
 .admin-shell { min-height: 100vh; }
-.admin-sidebar { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; padding: 0.75rem 1rem; border-bottom: 1px solid var(--border); background: var(--canvas-soft); }
+.admin-sidebar { position: relative; z-index: 30; padding: 0.75rem 1rem; border-bottom: 1px solid var(--border); background: var(--canvas-soft); }
+.admin-sidebar-top { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; }
 .admin-brand { min-width: 0; }
 .admin-brand h1 { margin-bottom: 0; font-size: 1rem; }
-.admin-brand .badge, .admin-account-copy { display: none; }
-.admin-nav { grid-column: 1 / -1; display: flex; gap: 0.35rem; margin-top: 0.65rem; overflow-x: auto; }
-.nav-link { min-height: 42px; display: flex; align-items: center; gap: 0.65rem; flex: 0 0 auto; padding: 0.6rem 0.75rem; border-radius: var(--radius-sm); color: var(--text-muted); font-weight: 600; }
+.admin-brand .badge { display: none; }
+.admin-nav { display: none; gap: 0.35rem; margin-top: 0.75rem; }
+.admin-nav.is-open { display: grid; }
+.nav-link { min-height: 42px; display: flex; align-items: center; gap: 0.65rem; padding: 0.6rem 0.75rem; border-radius: var(--radius-sm); color: var(--text-muted); font-weight: 600; }
 .nav-link:hover { background: var(--surface-raised); color: var(--text); }
-.admin-account { grid-column: 2; grid-row: 1; }
-.admin-account .btn { width: auto; }
+.admin-account { display: none; margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid var(--border); }
+.admin-account.is-open { display: block; }
+.admin-account-copy { display: grid; padding: 0 0.75rem 0.75rem; }
+.admin-account-copy strong { overflow-wrap: anywhere; font-size: 0.88rem; }
+.admin-account-copy span { color: var(--text-subtle); font-size: 0.78rem; }
+.admin-account .btn { width: 100%; }
 .admin-main { min-width: 0; padding: 1rem; overflow-x: hidden; }
 
 .client-shell { min-height: 100vh; display: flex; flex-direction: column; }
-.client-header { position: sticky; top: 0; z-index: 30; min-height: var(--header-height); display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; padding: 0.75rem 1rem; border-bottom: 1px solid var(--border); background: rgba(16, 21, 18, 0.94); backdrop-filter: blur(12px); }
+.client-header { position: sticky; top: 0; z-index: 30; min-height: var(--header-height); display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; padding: 0.75rem 1rem; border-bottom: 1px solid var(--border); background: var(--header-bg); backdrop-filter: blur(12px); }
 .client-brand, .client-account { display: flex; align-items: center; gap: 0.65rem; }
 .client-brand { min-width: 0; font-weight: 750; }
+.client-brand > span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .client-brand-icon { width: 36px; height: 36px; display: grid; place-items: center; flex: 0 0 36px; border-radius: var(--radius-sm); background: var(--primary); color: var(--primary-contrast); }
-.client-welcome { display: none; }
+.client-account { display: none; }
+.client-mobile-menu { position: absolute; top: 100%; left: 0; right: 0; display: none; gap: 0.25rem; padding: 0.75rem 1rem 1rem; border-bottom: 1px solid var(--border); background: var(--surface); box-shadow: var(--shadow); }
+.client-mobile-menu.is-open { display: grid; }
+.client-mobile-menu > a { min-height: 44px; display: flex; align-items: center; gap: 0.65rem; padding: 0.65rem 0.75rem; border-radius: var(--radius-sm); color: var(--text-muted); font-weight: 650; }
+.client-mobile-menu > a:hover { background: var(--surface-raised); color: var(--text); }
+.client-mobile-account { display: grid; gap: 0.75rem; margin-top: 0.4rem; padding-top: 0.8rem; border-top: 1px solid var(--border); }
+.client-mobile-account strong { overflow-wrap: anywhere; }
 .client-main { flex: 1; padding: 1rem; }
 
 .portal-layout { display: grid; gap: 1.25rem; align-items: start; }
 .portal-main { min-width: 0; }
 .portal-sidebar { display: none; }
-.mobile-section-nav { position: sticky; top: var(--header-height); z-index: 20; display: flex; gap: 0.35rem; margin: -0.25rem 0 1rem; padding: 0.5rem; overflow-x: auto; border: 1px solid var(--border); border-radius: var(--radius); background: rgba(25, 33, 29, 0.96); }
 .section-nav { display: grid; gap: 0.2rem; }
 .section-nav-item { min-height: 40px; display: flex; align-items: center; gap: 0.65rem; padding: 0.55rem 0.75rem; border: 0; border-left: 2px solid transparent; border-radius: var(--radius-sm); background: transparent; color: var(--text-muted); cursor: pointer; text-align: left; }
 .section-nav-item:hover { background: var(--surface-raised); color: var(--text); }
 .section-nav-item.is-active { border-left-color: var(--primary); background: var(--primary-soft); color: var(--primary); }
-.mobile-section-nav .section-nav-item { flex: 0 0 auto; border-left: 0; border-bottom: 2px solid transparent; }
-.mobile-section-nav .section-nav-item.is-active { border-bottom-color: var(--primary); }
-.section-anchor { scroll-margin-top: calc(var(--header-height) + 4rem); }
+.section-anchor { scroll-margin-top: calc(var(--header-height) + 1rem); }
 
 @media (min-width: 641px) {
   .admin-main, .client-main { padding: 1.5rem; }
   .client-header { padding-inline: 1.5rem; }
-  .client-welcome { display: flex; align-items: center; gap: 0.5rem; font-size: 0.88rem; }
-  .client-welcome span { color: var(--text-muted); }
+  .client-mobile-menu { padding-inline: 1.5rem; }
 }
 
 @media (min-width: 901px) {
   .admin-shell { display: grid; grid-template-columns: 240px minmax(0, 1fr); }
   .admin-sidebar { position: sticky; top: 0; height: 100vh; display: flex; flex-direction: column; align-items: stretch; padding: 1.25rem 1rem; border-right: 1px solid var(--border); border-bottom: 0; }
-  .admin-brand { padding: 0.5rem 0.75rem 1.5rem; }
+  .admin-sidebar-top { display: grid; gap: 1rem; }
+  .admin-brand { padding: 0.5rem 0.75rem 0; }
   .admin-brand h1 { margin-bottom: 0.65rem; font-size: 1.15rem; }
   .admin-brand .badge { display: inline-flex; }
-  .admin-nav { display: grid; margin-top: 0; overflow: visible; }
-  .admin-account { margin-top: auto; padding-top: 1rem; border-top: 1px solid var(--border); }
-  .admin-account-copy { display: grid; padding: 0 0.75rem 1rem; }
-  .admin-account-copy strong { font-size: 0.88rem; }
-  .admin-account-copy span { color: var(--text-subtle); font-size: 0.78rem; }
-  .admin-account .btn { width: 100%; }
-  .admin-main { padding: 2rem; }
-  .client-main { padding: 2rem; }
+  .admin-sidebar .topbar-actions { padding: 0 0.75rem 1rem; }
+  .mobile-menu-button { display: none; }
+  .admin-nav, .admin-nav.is-open { display: grid; margin-top: 0; }
+  .admin-account, .admin-account.is-open { display: block; margin-top: auto; padding-top: 1rem; border-top: 1px solid var(--border); }
+  .admin-account-copy { padding-bottom: 1rem; }
+  .admin-main, .client-main { padding: 2rem; }
   .client-header { padding-inline: 2rem; }
+  .client-account { display: flex; margin-left: auto; }
+  .client-account > strong { max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .client-mobile-menu, .client-mobile-menu.is-open { display: none; }
   .portal-layout { grid-template-columns: minmax(0, 1fr) 230px; gap: 1.5rem; }
   .portal-sidebar { display: block; }
   .portal-sidebar-sticky { position: sticky; top: calc(var(--header-height) + 1.5rem); padding: 1rem; }
   .portal-sidebar h2 { margin: 0 0 0.75rem 0.75rem; font-size: 0.9rem; }
-  .mobile-section-nav { display: none; }
-  .section-anchor { scroll-margin-top: calc(var(--header-height) + 1rem); }
 }

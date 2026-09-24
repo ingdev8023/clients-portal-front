@@ -8,8 +8,10 @@ import {
   subscribeToAuthChanges,
 } from '../models/authModel';
 import { toUserMessage } from '../lib/errors';
+import { usePreferences } from '../hooks/usePreferences';
 
 export default function AuthProvider({ children }) {
+  const { t } = usePreferences();
   const [user, setUser] = useState(null);
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -26,7 +28,7 @@ export default function AuthProvider({ children }) {
       })
       .catch((error) => {
         if (!active) return;
-        setAuthError(toUserMessage(error, 'Unable to verify your session.'));
+        setAuthError(toUserMessage(error, t('errors.session'), t));
         setLoading(false);
       });
 
@@ -42,7 +44,7 @@ export default function AuthProvider({ children }) {
       active = false;
       unsubscribe();
     };
-  }, []);
+  }, [t]);
 
   const refreshProfile = useCallback(async () => {
     if (!user) {
@@ -58,12 +60,12 @@ export default function AuthProvider({ children }) {
       return nextProfile;
     } catch (error) {
       setProfile(null);
-      setAuthError(toUserMessage(error, 'Your account profile could not be loaded.'));
+      setAuthError(toUserMessage(error, t('errors.profile'), t));
       return null;
     } finally {
       setLoading(false);
     }
-  }, [user]);
+  }, [t, user]);
 
   useEffect(() => {
     if (!user) return undefined;
@@ -78,7 +80,7 @@ export default function AuthProvider({ children }) {
       .catch((error) => {
         if (!active) return;
         setProfile(null);
-        setAuthError(toUserMessage(error, 'Your account profile could not be loaded.'));
+        setAuthError(toUserMessage(error, t('errors.profile'), t));
       })
       .finally(() => {
         if (active) setLoading(false);
@@ -87,7 +89,7 @@ export default function AuthProvider({ children }) {
     return () => {
       active = false;
     };
-  }, [user]);
+  }, [t, user]);
 
   const signIn = useCallback(async (email, password) => {
     setLoading(true);

@@ -94,6 +94,11 @@ select.form-input { cursor: pointer; }
 .badge-warning { color: var(--amber); background: var(--amber-soft); border-color: rgba(227, 170, 82, 0.28); }
 .badge-danger { color: var(--danger); background: var(--danger-soft); border-color: rgba(240, 120, 114, 0.28); }
 .badge-neutral { color: var(--text-muted); background: var(--surface-raised); border-color: var(--border); }
+.badge-status--active { color: var(--primary); background: var(--primary-soft); border-color: color-mix(in srgb, var(--primary) 30%, transparent); }
+.badge-status--completed, .badge-status--paid { color: var(--success); background: var(--success-soft); border-color: color-mix(in srgb, var(--success) 30%, transparent); }
+.badge-status--paused, .badge-status--pending { color: var(--amber); background: var(--amber-soft); border-color: color-mix(in srgb, var(--amber) 30%, transparent); }
+.badge-status--overdue, .badge-status--cancelled { color: var(--danger); background: var(--danger-soft); border-color: color-mix(in srgb, var(--danger) 30%, transparent); }
+.badge-status--planned { color: var(--text-muted); background: var(--surface-raised); border-color: var(--border); }
 
 .alert { padding: 0.75rem 0.9rem; border: 1px solid; border-radius: var(--radius-sm); font-size: 0.9rem; }
 .alert-error { color: #ffc4c0; background: var(--danger-soft); border-color: rgba(240, 120, 114, 0.35); }
@@ -132,7 +137,7 @@ tbody tr:hover { background: rgba(255, 255, 255, 0.018); }
   display: grid;
   place-items: center;
   padding: 1rem;
-  background: rgba(3, 8, 6, 0.76);
+  background: var(--backdrop);
 }
 .dialog-panel { width: min(720px, 100%); max-height: calc(100vh - 2rem); overflow-y: auto; padding: 1.5rem; border: 1px solid var(--border-strong); border-radius: var(--radius); background: var(--surface); box-shadow: var(--shadow); }
 .dialog-header, .dialog-actions { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }

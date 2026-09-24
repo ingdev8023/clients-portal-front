@@ -2,9 +2,11 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { createComment, getPortalData } from '../models/clientPortalModel';
 import { toUserMessage } from '../lib/errors';
 import { useAuth } from '../hooks/useAuth';
+import { usePreferences } from '../hooks/usePreferences';
 
 export function useClientPortalController() {
   const { user } = useAuth();
+  const { t } = usePreferences();
   const requestId = useRef(0);
   const [data, setData] = useState({
     projects: [],
@@ -34,12 +36,12 @@ export function useClientPortalController() {
       setSelectedProjectId(nextData.project?.id || '');
     } catch (loadError) {
       if (currentRequest === requestId.current) {
-        setError(toUserMessage(loadError, 'Your project data could not be loaded.'));
+        setError(toUserMessage(loadError, t('errors.portal'), t));
       }
     } finally {
       if (currentRequest === requestId.current) setLoading(false);
     }
-  }, []);
+  }, [t]);
 
   useEffect(() => {
     const currentRequest = ++requestId.current;
@@ -51,13 +53,13 @@ export function useClientPortalController() {
       })
       .catch((loadError) => {
         if (currentRequest === requestId.current) {
-          setError(toUserMessage(loadError, 'Your project data could not be loaded.'));
+          setError(toUserMessage(loadError, t('errors.portal'), t));
         }
       })
       .finally(() => {
         if (currentRequest === requestId.current) setLoading(false);
       });
-  }, []);
+  }, [t]);
 
   const selectProject = (projectId) => {
     setSelectedProjectId(projectId);
@@ -67,11 +69,11 @@ export function useClientPortalController() {
   const postComment = async () => {
     const message = comment.trim();
     if (!message) {
-      setCommentError('Write a comment before posting.');
+      setCommentError(t('validation.commentRequired'));
       return;
     }
     if (message.length > 2000) {
-      setCommentError('Comments must be 2,000 characters or fewer.');
+      setCommentError(t('validation.commentLength'));
       return;
     }
 
@@ -82,7 +84,7 @@ export function useClientPortalController() {
       setComment('');
       await loadPortal(data.project.id);
     } catch (postError) {
-      setCommentError(toUserMessage(postError, 'Your comment could not be posted.'));
+      setCommentError(toUserMessage(postError, t('errors.commentPost'), t));
     } finally {
       setPostingComment(false);
     }

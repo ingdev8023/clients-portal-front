@@ -3,9 +3,12 @@ import { Navigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { Eye, EyeOff, LogIn } from 'lucide-react';
 import { toUserMessage } from '../lib/errors';
+import PreferenceControls from '../components/PreferenceControls';
+import { usePreferences } from '../hooks/usePreferences';
 
 export default function Login() {
   const { user, profile, signIn } = useAuth();
+  const { t } = usePreferences();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -30,7 +33,7 @@ export default function Login() {
     try {
       await signIn(email.trim(), password);
     } catch (err) {
-      setError(toUserMessage(err, 'Sign in failed. Please try again.'));
+      setError(toUserMessage(err, t('login.failed'), t));
     } finally {
       setSubmitting(false);
     }
@@ -38,13 +41,14 @@ export default function Login() {
 
   return (
     <main className="login-page">
+      <div className="login-preferences"><PreferenceControls /></div>
       <section className="panel login-panel" aria-labelledby="login-title">
         <div className="login-heading">
           <div className="login-icon" aria-hidden="true">
             <LogIn size={28} />
           </div>
-          <h1 id="login-title">Client Portal</h1>
-          <p>Sign in to access your projects</p>
+          <h1 id="login-title">{t('login.title')}</h1>
+          <p>{t('login.subtitle')}</p>
         </div>
 
         {error && (
@@ -55,7 +59,7 @@ export default function Login() {
 
         <form onSubmit={handleLogin}>
           <div className="form-group">
-            <label className="form-label" htmlFor="email">Email</label>
+            <label className="form-label" htmlFor="email">{t('login.email')}</label>
             <input
               id="email"
               type="email"
@@ -68,10 +72,10 @@ export default function Login() {
             />
           </div>
           <div className="form-group">
-            <label className="form-label" htmlFor="password">Password</label>
+            <label className="form-label" htmlFor="password">{t('login.password')}</label>
             <div className="password-field">
-              <input id="password" type={showPassword ? 'text' : 'password'} className="form-input" value={password} onChange={(e) => setPassword(e.target.value)} required autoComplete="current-password" placeholder="Password" />
-              <button type="button" className="icon-button password-toggle" onClick={() => setShowPassword((visible) => !visible)} aria-label={showPassword ? 'Hide password' : 'Show password'} title={showPassword ? 'Hide password' : 'Show password'}>
+              <input id="password" type={showPassword ? 'text' : 'password'} className="form-input" value={password} onChange={(e) => setPassword(e.target.value)} required autoComplete="current-password" placeholder={t('login.password')} />
+              <button type="button" className="icon-button password-toggle" onClick={() => setShowPassword((visible) => !visible)} aria-label={showPassword ? t('login.hidePassword') : t('login.showPassword')} title={showPassword ? t('login.hidePassword') : t('login.showPassword')}>
                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
               </button>
             </div>
@@ -82,7 +86,7 @@ export default function Login() {
             disabled={submitting}
           >
             <LogIn size={18} />
-            {submitting ? 'Signing in...' : 'Sign in'}
+            {submitting ? t('login.submitting') : t('login.submit')}
           </button>
         </form>
       </section>

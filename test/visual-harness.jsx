@@ -1,8 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { MemoryRouter } from 'react-router-dom';
+import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import ProjectProgressPanel from '../src/components/ProjectProgressPanel';
 import { AdminProjectDetailsView } from '../src/pages/Admin/AdminProjectDetails';
+import PreferencesProvider from '../src/contexts/PreferencesProvider';
+import { ClientLayoutView } from '../src/pages/Client/ClientLayout';
 import '../src/index.css';
 
 const noop = async () => true;
@@ -24,12 +26,15 @@ const controller = {
 
 export function VisualHarness() {
   return (
-    <MemoryRouter>
-      <main className="visual-harness">
-        <ProjectProgressPanel project={{ progress_percentage: 64 }} activeStage={{ name: 'Implementation' }} payments={controller.payments} />
-        <AdminProjectDetailsView controller={controller} />
-      </main>
-    </MemoryRouter>
+    <PreferencesProvider>
+      <MemoryRouter>
+        <Routes>
+          <Route element={<ClientLayoutView profile={{ full_name: 'Alex Client' }} signOut={noop} />}>
+            <Route index element={<main className="visual-harness"><ProjectProgressPanel project={{ progress_percentage: 64 }} activeStage={{ name: 'Implementation' }} payments={controller.payments} /><AdminProjectDetailsView controller={controller} /></main>} />
+          </Route>
+        </Routes>
+      </MemoryRouter>
+    </PreferencesProvider>
   );
 }
 
